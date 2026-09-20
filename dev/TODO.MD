@@ -23,6 +23,7 @@ Todo list cause i have to much to remember
 - [x] ~~spawn card?~~ (copy keybind + [toomanyjokers](https://github.com/cg-223/toomanyjokers))
 - [x] tutorial state
 - [x] recreate shop
+- [ ] Unlock all
 
 ## Debug HUD options
 - [ ] Locks/what's locking
