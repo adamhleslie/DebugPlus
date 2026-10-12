@@ -1,0 +1,51 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "setup: link LSP libraries (.lib)",
+            "type": "process",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "${workspaceFolder}\\scripts\\setup-lib.cmd"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "detail": "One-time setup: junctions SMODS in, extracts the game code, clones love2d type defs into .lib\\; then restart the Lua language server."
+        },
+        {
+            "label": "deploy: link mod into %AppData%/Balatro/Mods",
+            "type": "process",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "${workspaceFolder}\\scripts\\deploy.cmd"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "detail": "One-time setup: junctions the repo (the mod folder) into %AppData%\\Balatro\\Mods for edit-in-place development."
+        },
+        {
+            "label": "logs: open lovely log folder",
+            "type": "process",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "start",
+                "",
+                "%AppData%\\Balatro\\Mods\\lovely\\log"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "silent"
+            },
+            "detail": "Opens the Lovely/SMODS log folder; open the newest lovely-*.log in VS Code to tail it."
+        }
+    ]
+}
