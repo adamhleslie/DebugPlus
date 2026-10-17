@@ -1,0 +1,8 @@
+{
+    "editor.formatOnSave": true,
+    "[lua]": {
+        "editor.defaultFormatter": "JohnnyMorganz.stylua"
+    },
+    "files.eol": "\r\n",
+    "search.useIgnoreFiles": false
+}
