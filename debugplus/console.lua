@@ -462,7 +462,7 @@ commands = {
     {
         name = "add",
         source = "debugplus",
-        shortDesc = "Adds specified card. Accepts Object Key, Set (Object Type), Center, Suit, Rank, or combination of Suit and Rank.",
+        shortDesc = "Adds specified card. Accepts Object Key, Set (Object Type), Suit, Rank, or combination of Suit and Rank.",
         desc = "",
         exec = function(args, rawArgs, dp)
             if args[1] then
