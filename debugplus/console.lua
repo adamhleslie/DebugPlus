@@ -459,6 +459,112 @@ commands = {
             end
         end,
     },
+    {
+        name = "add",
+        source = "debugplus",
+        shortDesc = "Adds specified card. Accepts Object Key, Set (Object Type), Center, Suit, Rank, or combination of Suit and Rank.",
+        desc = "",
+        exec = function(args, rawArgs, dp)
+            if args[1] then
+                -- Handle direct lookup first
+                if G.P_CENTERS[args[1]] then
+                    SMODS.add_card { key = args[1] }
+                    return "Added from key: " .. args[1] .. "."
+                end
+
+                -- Handle object sets
+                -- Unify args 1 and 2 if playing card
+                local args1_lower = args[1]:lower()
+                if
+                    (args[2] and (args1_lower == "playing") and (args[2]:lower() == "card"))
+                    or (args1_lower == "card")
+                    or (args1_lower == "playingcard")
+                then
+                    args[1] = "Playing Card"
+                end
+
+                local custom_types = { "Playing Card", "Base", "Enhanced" }
+                local find_set_key = function(identifier)
+                    -- Build lower case key -> key lookup table
+                    local key_lookup = {}
+                    for _, v in pairs(custom_types) do
+                        key_lookup[v:lower()] = v
+                    end
+                    for k, _ in pairs(SMODS.ObjectTypes) do
+                        key_lookup[k:lower()] = k
+                    end
+                    return key_lookup[identifier:lower()]
+                end
+
+                local set_key = find_set_key(args[1])
+                if set_key then
+                    SMODS.add_card { set = set_key }
+                    return "Added from set: " .. args[1] .. "."
+                end
+
+                -- Handle suits and ranks
+                -- Searches table for identifier by key, or by value's `card_key` parameter
+                local find_card_by_key = function(table, identifier)
+                    identifier = identifier:lower()
+                    for k, v in pairs(table) do
+                        local valid_identifiers = {
+                            [k:lower()] = true,
+                            [v.card_key:lower()] = true,
+                        }
+                        if valid_identifiers[identifier] then
+                            return v
+                        end
+                    end
+                    return nil
+                end
+                local find_suit = function(identifier)
+                    return find_card_by_key(SMODS.Suits, identifier)
+                end
+                local find_rank = function(identifier)
+                    return find_card_by_key(SMODS.Ranks, identifier)
+                end
+
+                local suit = find_suit(args[1])
+                local rank = find_rank(args[1])
+                if args[2] then
+                    if not suit then
+                        suit = find_suit(args[2])
+                    end
+                    if not rank then
+                        rank = find_rank(args[2])
+                    end
+                end
+
+                local valid_card_table = false
+                local suit_key = "?"
+                local rank_key = "?"
+                local card_table = {}
+                if suit then
+                    card_table.suit = suit.key
+                    suit_key = suit.key
+                    valid_card_table = true
+                end
+                if rank then
+                    card_table.rank = rank.key
+                    rank_key = rank.key
+                    valid_card_table = true
+                end
+
+                if valid_card_table then
+                    SMODS.add_card(card_table)
+                    return "Added from suit and rank pair: ("
+                        .. suit_key
+                        .. ", "
+                        .. rank_key
+                        .. ")."
+                end
+
+                return "Unabled to interpret args: " .. rawArgs .. ".", "ERROR"
+            else
+                return "This command requires one arg.", "ERROR"
+            end
+        end,
+    },
 }
 local input = ui.TextInput.new(0, font.getFont())
 
